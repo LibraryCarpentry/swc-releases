@@ -74,7 +74,7 @@ def guess_person_name(raw):
     return raw[0] , ' '.join(raw[1:])
 
 def create_ini_file():
-    preferred_repos = ['hg-novice', 'git-novice', 'make-novice', 'matlab-novice-inflammation', 'python-novice-inflammation', 'r-novice-gapminder', 'r-novice-inflammation', 'shell-novice', 'sql-novice-survey', 'lesson-example', 'instructor-training', 'workshop-template']
+    preferred_repos = ['library-shell', 'library-openrefine', 'library-git', 'library-data-intro']
     preferred_ini = 'auto.ini'
 
     parser = argparse.ArgumentParser("Create a skeleton ini file (to copy and edit)")
@@ -85,6 +85,8 @@ def create_ini_file():
     for r in preferred_repos:
         if r.startswith('dc:'):
             url = "git@github.com:datacarpentry/" + r[3:] + ".git"
+        elif r.startswith('library'):
+            url = "git@github.com:jt14den/" + r + ".git"
         else:
             url = "git@github.com:swcarpentry/" + r + ".git"
         config.add_section(r)
@@ -244,7 +246,7 @@ def update_zenodo_submission():
             "description": description,
             "contributors": [{"name": m, "type": "Editor"} for m in c[MAINTAINERS].split(';')],
             "creators": [{"name": m} for m in c[AUTHORS].split(';')],
-            "communities": [{"identifier": "swcarpentry"}], # TODO maybe use c[COMMUNITIES].split... if generalization is required
+            "communities": [{"identifier": "library-carpentry"}], # TODO maybe use c[COMMUNITIES].split... if generalization is required
             }}
             req = requests.put(update_url, data=json.dumps(metadata), headers=HEADERS_JSON)
             resp = req.json()
@@ -270,6 +272,7 @@ def guess_informations_from_repository():
         if r == 'workshop-template': title = "Workshop Template"
         if yml['carpentry'] == 'swc': title = "Software Carpentry: "+title
         if yml['carpentry'] == 'dc':  title = "Data Carpentry: "+title
+        if yml['carpentry'] == 'lc':  title = "Library Carpentry: "+title
         if FULLTITLE not in c:
             c[FULLTITLE] = title
             print(FULLTITLE+':', c[FULLTITLE])

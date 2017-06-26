@@ -2,20 +2,22 @@
 
 ### Script setup
 set -e
-W=$(dirname $(readlink -f $0))
+W=$(dirname $(greadlink -f $0))
 
 
 ### Tools
 resolve-lesson() {
     if [[ ${1:0:3} == 'dc:' ]] ; then
         printf %s "https://github.com/datacarpentry/${1:3}.git"
+    elif [[ ${1:0:7} == 'library' ]]; then
+        printf %s "https://github.com/jt14den/$1.git"
     else
         printf %s "https://github.com/swcarpentry/$1"
     fi
 }
 is-tag() {
     test "$2" = v5.3
-    return 
+    return
     # might need auth... to avoid rate limits
     curl -s "${1/github.com/api.github.com\/repos}/git/refs/tags/$2" | grep -q '"ref"'
 }
@@ -46,7 +48,7 @@ ensure-git-version-is-at-least() {
 #fi
 
 if [ $# -lt 2 ] ; then
-    echo "Requires a release name and a list of lessons (can be empty for updates)" 
+    echo "Requires a release name and a list of lessons (can be empty for updates)"
     exit
 fi
 
