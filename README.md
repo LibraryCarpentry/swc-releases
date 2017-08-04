@@ -120,6 +120,28 @@ NOW, let's go for the release, we already have the ini file (we'll add it to hav
     C
     B 7
     B 8
+    B 9
+    A obfuscate
+    C
+
+Now, we need to check on zenodo, but we can still also host the release (it is a good preview at worse).
+
+    ##DO: modify the makefile, taking inspiration from   git  log -p 775456~..775456 -- Makefile
+    #^ this time, a new lesson set had to be created (as we don't release the instructor-training)
+    git add Makefile
+    make 2017.08
+    #^ got a failure du to wrong handling of tags (fixed), but need to redo
+    rm -rf 2017.08/
+    make clean-failure
+    make 2017.08
+
+    git commit -m 'Release 2017.08'
+
+And we can make some bibtex and html:
+
+    B print-publication-record -o bib-html.html
+    B print-bibtex -t book     -o bib-book.bib
+    B print-bibtex             -o bib-misc.bib
 
 # RANDOM NOTES 2017-06-03 (somewhat jibberish)
 
@@ -129,20 +151,20 @@ NOW, let's go for the release, we already have the ini file (we'll add it to hav
     python3 rel.py git-for-all auto.ini branch
     python3 rel.py git-for-all auto.ini pull
 
-    head -6 auto.ini > tmp.ini    
+    head -6 auto.ini > tmp.ini
 
     ./authors.sh tmp.ini check-author-diff-summary
-    
+
     tail -13 auto.ini |head -7 > tmp.ini
     # or a pair of lesson or anything, or start from some reduced 2017.02
-    
+
     python3 rel.py git-for-all tmp.ini stash
     python3 rel.py git-for-all tmp.ini checkout 2017.02~~
     RE=YES ./authors.sh tmp.ini process-repo
     python3 rel.py 3 tmp.ini
     python3 rel.py 6 tmp.ini
     python3 rel.py print-bibtex tmp.ini
-    
+
 <!-- OLD NOTES -->
 
 # Release Model: how the 2016.06 release was done
